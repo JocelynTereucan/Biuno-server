@@ -1,6 +1,9 @@
+import express from "express";
+
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(express.json());
 
 app.get("/", (req, res) => {
     res.send("¡Servidor de Biuno funcionando!");
@@ -14,7 +17,7 @@ app.post("/data", (req, res) => {
     }
     res.json({ message: `Datos recibidos: ${nombre}, ${edad}` });
   });
-  
+
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
