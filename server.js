@@ -13,12 +13,35 @@ app.get("/", (req, res) => {
 
 // Nueva ruta POST
 app.post("/data", (req, res) => {
-    const { nombre, edad } = req.body;
-    if (!nombre || !edad) {
-      return res.status(400).json({ error: "Faltan datos" });
+    const {
+        actividadId,
+        childId,
+        respuestaSeleccionada,
+        esCorrecta,
+        duracionSegundos,
+        vecesEscuchoInstruccion,
+        timestamp,
+        imagenBase64
+    } = req.body;
+
+    if (!childId || !respuestaSeleccionada || !timestamp) {
+        return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
-    res.json({ message: `Datos recibidos: ${nombre}, ${edad}` });
-  });
+
+    // Aquí puedes imprimir todo para revisar
+    console.log("Datos recibidos:");
+    console.log("Actividad:", actividadId);
+    console.log("Niño:", childId);
+    console.log("Respuesta:", respuestaSeleccionada);
+    console.log("Correcta:", esCorrecta);
+    console.log("Duración:", duracionSegundos);
+    console.log("Reproducciones:", vecesEscuchoInstruccion);
+    console.log("Timestamp:", timestamp);
+    console.log("Imagen Base64 (primeros 100 caracteres):", imagenBase64.substring(0, 100));
+
+    res.json({ message: "Datos recibidos correctamente" });
+});
+
 
 
 app.listen(PORT, () => {
