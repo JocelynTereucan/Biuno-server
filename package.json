@@ -7,6 +7,18 @@
         "start": "node server.js"
     },
     "dependencies": {
-        "express": "^4.21.2"
-    }
+        "express": "^4.21.2",
+        "firebase-admin": "^13.3.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/JocelynTereucan/Biuno-server.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/JocelynTereucan/Biuno-server/issues"
+    },
+    "homepage": "https://github.com/JocelynTereucan/Biuno-server#readme"
 }

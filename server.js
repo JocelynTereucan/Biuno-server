@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const admin = require("firebase-admin");
-const serviceAccount = require("./firebaseKey.json");
+const serviceAccount = JSON.parse(process.env.FIREBASE_KEY_JSON);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
