@@ -1,5 +1,5 @@
-
-
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -28,19 +28,35 @@ app.post("/data", (req, res) => {
         return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
 
-    // Aquí puedes imprimir todo para revisar
-    console.log("Datos recibidos:");
-    console.log("Actividad:", actividadId);
-    console.log("Niño:", childId);
-    console.log("Respuesta:", respuestaSeleccionada);
-    console.log("Correcta:", esCorrecta);
-    console.log("Duración:", duracionSegundos);
-    console.log("Reproducciones:", vecesEscuchoInstruccion);
-    console.log("Timestamp:", timestamp);
-    console.log("Imagen Base64 (primeros 100 caracteres):", imagenBase64.substring(0, 100));
+    const nuevoResultado = {
+        actividadId,
+        childId,
+        respuestaSeleccionada,
+        esCorrecta,
+        duracionSegundos,
+        vecesEscuchoInstruccion,
+        timestamp,
+        imagenBase64
+    };
 
-    res.json({ message: "Datos recibidos correctamente" });
+    const filePath = path.join(__dirname, "resultados.json");
+
+    // Leer archivo anterior (si existe)
+    let resultados = [];
+    if (fs.existsSync(filePath)) {
+        const contenido = fs.readFileSync(filePath, "utf8");
+        resultados = contenido ? JSON.parse(contenido) : [];
+    }
+
+    // Agregar nuevo resultado
+    resultados.push(nuevoResultado);
+
+    // Guardar de nuevo
+    fs.writeFileSync(filePath, JSON.stringify(resultados, null, 2));
+
+    res.json({ message: "Datos recibidos y guardados exitosamente" });
 });
+
 
 
 
