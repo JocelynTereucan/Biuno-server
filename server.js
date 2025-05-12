@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 });
 
 // 📤 Ruta para recibir datos desde Unity
-app.post("/data", (req, res) => {
+app.post("/data", async (req, res) => {
   console.log("📦 Datos recibidos en POST /data:");
   console.log(JSON.stringify(req.body, null, 2));  // Imprimir JSON formateado
 
@@ -47,7 +47,6 @@ app.post("/data", (req, res) => {
     imagenBase64
   } = req.body;
 
-  // Validación básica
   if (!childId || !respuestaSeleccionada || !timestamp) {
     return res.status(400).json({ error: "Faltan datos obligatorios" });
   }
@@ -63,16 +62,26 @@ app.post("/data", (req, res) => {
     imagenBase64
   };
 
-  // Guardar en Firebase
-  db.collection("resultados").add(nuevoResultado)
-    .then(() => {
-      console.log("✅ Datos guardados en Firebase");
-      res.json({ message: "Datos guardados en Firebase exitosamente" });
-    })
-    .catch((error) => {
-      console.error("❌ Error al guardar en Firebase:", error);
-      res.status(500).json({ error: "Error al guardar en Firebase" });
-    });
+  try {
+    await db.collection("resultados").add(nuevoResultado);
+    console.log("✅ Datos guardados en Firebase");
+    res.json({ message: "Datos guardados en Firebase exitosamente" });
+  } catch (error) {
+    console.error("❌ Error al guardar en Firebase:", error);
+    res.status(500).json({ error: "Error al guardar en Firebase" });
+  }
+});
+
+// 📥 Nueva ruta GET para ver todos los resultados
+app.get("/data", async (req, res) => {
+  try {
+    const snapshot = await db.collection("resultados").orderBy("timestamp", "desc").get();
+    const resultados = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.json(resultados);
+  } catch (error) {
+    console.error("❌ Error al obtener datos de Firebase:", error);
+    res.status(500).json({ error: "Error al obtener datos de Firebase" });
+  }
 });
 
 // 🟢 Iniciar servidor
