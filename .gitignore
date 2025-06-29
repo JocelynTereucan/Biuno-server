@@ -1,4 +1,2 @@
-/biuno-server/node_modules/
-/Biuno_educadora/node_modules/
-/Biuno_educadora/dist/
+/biuno-config/node_modules/
 /.env
